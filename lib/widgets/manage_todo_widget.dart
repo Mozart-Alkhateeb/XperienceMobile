@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/models/manageUser.dart';
 import '../services/api_service.dart';
-import '../models/user.dart';
+
 class ManageTodoWidget extends StatefulWidget {
-  final User todo; // a new or existing todo
+  final ManageUserModel todo;
   final Function saveChanges; // Function passed by the parent widget to save changes
   const ManageTodoWidget({Key key, this.todo, this.saveChanges})
       : super(key: key);
@@ -11,7 +12,6 @@ class ManageTodoWidget extends StatefulWidget {
 }
 class _ManageTodoWidgetState extends State<ManageTodoWidget> {
   ApiService _apiService;
-  Future<List<String>> _statuses;
 // Define the form key that preserve the state of the form
   final _form = GlobalKey<FormState>();
   @override
@@ -35,39 +35,28 @@ class _ManageTodoWidgetState extends State<ManageTodoWidget> {
                   widget.todo.userName = value; // on saved we persist the form state
                 },
               ),
-              FutureBuilder(
-                future: _statuses, // Future like the on inside the home screen
-                builder: (_, AsyncSnapshot<List<String>> snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                          "Something wrong with message: ${snapshot.error.toString()}"),
-                    );
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    var statuses = snapshot.data;
-                    return DropdownButtonFormField( // Building a drop down list with all statuses
-                      hint: Text('Select Todo'),
-                      value: widget.todo.gender,
-                      onChanged: (status) {
-                        setState(() {
-                          widget.todo.gender = status;
-                        });
-                      },
-                      items: statuses.map(
-                            (status) {
-                          return DropdownMenuItem(
-                            child: Text(status),
-                            value: status,
-                          );
-                        },
-                      ).toList(),
-                      onSaved: (value) => widget.todo.email = value, // on saved we persist the form state
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+              TextFormField(
+                initialValue: widget.todo.email,
+                onSaved: (value) {
+                  widget.todo.email = value; // on saved we persist the form state
+                },
+              ),
+              TextFormField(
+                initialValue: widget.todo.gender,
+                onSaved: (value) {
+                  widget.todo.gender = value; // on saved we persist the form state
+                },
+              ),
+              TextFormField(
+                initialValue: widget.todo.password,
+                onSaved: (value) {
+                  widget.todo.password = value; // on saved we persist the form state
+                },
+              ),
+              TextFormField(
+                initialValue: widget.todo.dateOfBirth.toString(),
+                onSaved: (value) {
+                  widget.todo.dateOfBirth = DateTime.parse(value); // on saved we persist the form state
                 },
               ),
               FlatButton(

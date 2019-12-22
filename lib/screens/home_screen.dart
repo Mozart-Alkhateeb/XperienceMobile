@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/manage_todo_widget.dart';
-import '../models/user.dart';
+import '../models/manageUser.dart';
 import '../services/api_service.dart';
 class HomeScreen extends StatefulWidget {
   @override
@@ -8,16 +8,18 @@ class HomeScreen extends StatefulWidget {
 }
 class _HomeScreenState extends State<HomeScreen> {
   ApiService _apiService;
+
   @override
   void initState() {
     super.initState();
     _apiService = ApiService();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Flutterrr ToDo"),
+        title: const Text("Flutter Add User Trial "),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
@@ -34,15 +36,18 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SafeArea(
         child: FutureBuilder(
-          future: _apiService.getUsers(), // Get todos which returns a future
-          builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+          //future: _apiService.getToDos(), // Get todos which returns a future
+          builder: (BuildContext context,
+              AsyncSnapshot<List<ManageUserModel>> snapshot) {
             if (snapshot.hasError) {
               return Center(
                 child: Text(
-                    "Something wrong with messagee: ${snapshot.error.toString()}"),
+                    "Somethingg wrongg with message: ${snapshot.error
+                        .toString()}"),
               );
-            } else if (snapshot.connectionState == ConnectionState.done) { // Called when the future is resolved (i.e: when the result is returned from the server)
-              List<User> todos = snapshot.data;
+            } else if (snapshot.connectionState == ConnectionState
+                .done) { // Called when the future is resolved (i.e: when the result is returned from the server)
+              List<ManageUserModel> todos = snapshot.data;
               return _buildListView(todos);
             } else {
               return Center(
@@ -54,14 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 // Build todos list
-  Widget _buildListView(List<User> toDos) {
+  Widget _buildListView(List<ManageUserModel> toDos) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: ListView.builder(
         itemCount: toDos.length,
         itemBuilder: (context, index) {
-          User toDo = toDos[index];
+          ManageUserModel toDo = toDos[index];
           return Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Card(
@@ -72,13 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     Text(
                       toDo.userName,
-                      style: Theme.of(context).textTheme.title,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .title,
                     ),
-                    Text(toDo.email),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        FlatButton(
+                        /*FlatButton(
                           onPressed: () {
                             _apiService.deleteTodo(toDo.id).then((_) {
                               setState(() {
@@ -90,14 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             Icons.delete,
                             color: Colors.red,
                           ),
-                        ),
+                        ),*/
                         FlatButton(
                           onPressed: () {
                             _openManageTodoSheet(toDo, context);
                           },
                           child: Icon(
                             Icons.edit,
-                            color: Colors.red,
+                            color: Colors.blue,
                           ),
                         ),
                       ],
@@ -111,9 +119,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 // This method opens the modal bottom sheet which hosts the ManageTodoWidget which is responsible for editing or adding new Todos
-  void _openManageTodoSheet(User toDo, BuildContext context) {
-    toDo = toDo ?? new User();
+  void _openManageTodoSheet(ManageUserModel toDo, BuildContext context) {
+    toDo = toDo ?? new ManageUserModel();
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -128,17 +137,12 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-  void _saveChanges(User todo) {
-    if (todo.id == 0) { // New Todo with id zero
-      _apiService.addUser(todo).then((_) {
-        Navigator.of(context).pop(); // Close Modal Bottom sheet
-        setState(() {}); // Calling set state to rebuild the UI and get fresh todo list
-      });
-    } else {
-      _apiService.updateUser(todo).then((_) {
-        Navigator.of(context).pop(); // Close Modal Bottom sheet
-        setState(() {}); // Calling set state to rebuild the UI and get fresh todo list
-      });
-    }
+
+  void _saveChanges(ManageUserModel todo) {
+
+    _apiService.addUser(todo).then((_) {
+      Navigator.of(context).pop(); // Close Modal Bottom sheet
+      setState(() {});
+    });
   }
 }

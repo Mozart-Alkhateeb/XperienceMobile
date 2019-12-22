@@ -43,6 +43,7 @@ class User {
   DateTime dateOfBirth;
   String gender;
   String info;
+  String password;
   int locationId;
   int religionId;
   String userName;
@@ -50,29 +51,25 @@ class User {
 
 //  User(this.username, this.profilePicture, this.followers, this.following,
 //      this.posts, this.savedPosts, this.hasStory);
-  User({this.id,this.name,this.biography,this.profilePicture,this.connectorStatus,this.dateOfBirth,this.gender,this.info,this.locationId,this.religionId,this.userName,this.email,this.username, this.followers, this.following,this.posts, this.savedPosts, this.hasStory});
+  User({this.id,this.userName,this.email,this.gender,this.dateOfBirth,this.password,this.name,this.biography,this.connectorStatus,this.info,this.locationId,this.religionId,this.profilePicture,});
 
 // Flutter way of creating a constructor
 // factory for mapping JSON to current instance of the Todo class
   factory User.fromJson(Map<String, dynamic> json) => User(
-      username: json['username'],
-      profilePicture: json['ProfilePicture'],
-      followers: json['followers'],
-      following: json['following'],
-      posts: json['posts'],
-      savedPosts: json['savedPosts'],
-      hasStory: json['hasStory'],
-    userName: json['UserName'],
+
     id: json['Id'],
+    userName: json['UserName'],
+    email: json['Email'],
+    gender: json['Gender'],
+    dateOfBirth: json['DateOfBirth'],
+    password: json['Password'],
     name: json['Name'],
     biography: json['Biography'],
     connectorStatus: json['ConnectorStatus'],
-    dateOfBirth: json['DateOfBirth'],
-    gender: json['Gender'],
     info: json['Info'],
     locationId: json['LocationId'],
     religionId: json['ReligionId'],
-    email: json['Email']
+    profilePicture: json['ProfilePicture']
 
 
     );
@@ -80,7 +77,7 @@ class User {
 // Instance method for converting a todo item to a map
   Map<String, dynamic> toMap() {
     return {"Id": id, "UserName": userName, "Name": name,"Biography":biography,"ProfilePicture":profilePicture,"ConnectorStatus":connectorStatus,
-    "DateOfBirth":dateOfBirth,"Gender":gender,"Info":info,"LocationId":locationId,"ReligionId":religionId,"Email":email};
+    "DateOfBirth":dateOfBirth,"Gender":gender,"Info":info,"LocationId":locationId,"ReligionId":religionId,"Email":email,"Password":password};
   }
 }
 //  A helper method that converts a json array into List<ToDo>
